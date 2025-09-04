@@ -1,0 +1,11 @@
+name: Print Current Date and Time
+
+on: [pull_request, push]
+
+jobs:
+  print-datetime:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print current date and time
+        shell: bash
+        run: echo "Current date and time is $(date)"
