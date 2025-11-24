@@ -1,0 +1,96 @@
+package hw_7;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+/**
+ * Простая реализация списка на основе массива
+ */
+public class CustomArrayList<A> implements CustomList<A>, Iterable<A> {
+  private Object[] elements;
+  private int size;
+
+  /**
+   * Создает пустой список с начальным размером 10
+   */
+  public CustomArrayList() {
+    elements = new Object[10];
+    size = 0;
+  }
+
+  /**
+   * Добавляет элемент в конец списка
+   */
+  public void add(A element) {
+    if (element == null) {
+      throw new IllegalArgumentException("Element cannot be null");
+    }
+    if (size == elements.length) {
+      Object[] newElements = new Object[(int)(elements.length * 1.5) + 1];
+      for (int i = 0; i < size; i++) {
+        newElements[i] = elements[i];
+      }
+      elements = newElements;
+    }
+    elements[size++] = element;
+  }
+
+  /**
+   * Возвращает элемент по указанному индексу
+   */
+  public A get(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException();
+    }
+    return (A) elements[index];
+  }
+
+  /**
+   * Удаляет элемент по индексу и сдвигает остальные элементы
+   * @return удаленный элемент
+   */
+  public A remove(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException();
+    }
+    A removed = (A) elements[index];
+    for (int i = index; i < size - 1; i++) {
+      elements[i] = elements[i + 1];
+    }
+    size = size - 1;
+    elements[size] = null;
+    return removed;
+  }
+
+  /**
+   * @return текущее количество элементов в списке
+   */
+  public int size() {
+    return size;
+  }
+
+  /**
+   * @return true если список пустой, false если есть элементы
+   */
+  public boolean isEmpty() {
+    return size == 0;
+  }
+
+  /**
+   * @return итератор для прохода по всем элементам списка
+   */
+  public Iterator<A> iterator() {
+    return new Iterator<A>() {
+      private int index = 0;
+
+      public boolean hasNext() {
+        return index < size;
+      }
+
+      public A next() {
+        if (!hasNext()) throw new NoSuchElementException();
+        return (A) elements[index++];
+      }
+    };
+  }
+}
